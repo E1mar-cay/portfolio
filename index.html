@@ -944,13 +944,18 @@
 
       contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        console.log('Form submitted');
 
-        // Honeypot check — bots fill hidden fields, humans don't
+        // Honeypot check
         const honeypot = document.getElementById('_hp_website');
-        if (honeypot && honeypot.value !== '') return;
+        if (honeypot && honeypot.value !== '') {
+          console.log('Honeypot triggered');
+          return;
+        }
 
         // Rate limit check
         if (!checkRateLimit()) {
+          console.log('Rate limit exceeded');
           setStatus('error', 'Too many messages sent. Please try again later or email elmarcayaba39@gmail.com directly.');
           return;
         }
@@ -961,16 +966,30 @@
         const subjectEl = contactForm.querySelector('[name="subject"]');
         const msgEl     = contactForm.querySelector('[name="message"]');
 
+        if (!nameEl || !emailEl || !msgEl) {
+          console.error('Form fields not found:', { nameEl, emailEl, subjectEl, msgEl });
+          setStatus('error', 'Form error. Please refresh and try again.');
+          return;
+        }
+
         nameEl.value    = sanitize(nameEl.value);
-        subjectEl.value = sanitize(subjectEl.value);
+        if (subjectEl) subjectEl.value = sanitize(subjectEl.value);
         msgEl.value     = sanitize(msgEl.value);
 
         // Basic email format check
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(emailEl.value.trim())) {
+          console.log('Invalid email format');
           setStatus('error', 'Please enter a valid email address.');
           return;
         }
+
+        console.log('Sending email...', {
+          service: EMAILJS_SERVICE_ID,
+          template: EMAILJS_TEMPLATE_ID,
+          name: nameEl.value,
+          email: emailEl.value
+        });
 
         submitBtn.disabled = true;
         submitText.textContent = 'Sending...';
@@ -979,14 +998,15 @@
         formStatus.classList.add('hidden');
 
         emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, contactForm)
-          .then(() => {
+          .then((response) => {
+            console.log('EmailJS success:', response);
             incrementRate();
             setStatus('success', 'Message sent! I will get back to you soon.');
             contactForm.reset();
           })
           .catch((err) => {
             console.error('EmailJS error:', err);
-            setStatus('error', 'Something went wrong. Please email me directly at elmarcayaba39@gmail.com');
+            setStatus('error', 'Error: ' + (err.text || err.message || 'Please email me directly at elmarcayaba39@gmail.com'));
           })
           .finally(() => {
             submitBtn.disabled = false;

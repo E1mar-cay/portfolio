@@ -956,10 +956,10 @@
         }
 
         // Sanitize inputs
-        const nameEl    = contactForm.querySelector('[name=from_name]');
-        const emailEl   = contactForm.querySelector('[name=from_email]');
-        const subjectEl = contactForm.querySelector('[name=subject]');
-        const msgEl     = contactForm.querySelector('[name=message]');
+        const nameEl    = contactForm.querySelector('[name="from_name"]');
+        const emailEl   = contactForm.querySelector('[name="from_email"]');
+        const subjectEl = contactForm.querySelector('[name="subject"]');
+        const msgEl     = contactForm.querySelector('[name="message"]');
 
         nameEl.value    = sanitize(nameEl.value);
         subjectEl.value = sanitize(subjectEl.value);

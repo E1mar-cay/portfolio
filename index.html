@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elmar Cayaba</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class' }
+    </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .gradient-mesh {
+        background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #dbeafe 100%);
+        position: relative;
+      }
+
+      .gradient-mesh::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(30, 64, 175, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+      }
+
+      .accent-line {
+        position: relative;
+        padding-bottom: 12px;
+      }
+
+      .accent-line::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+        border-radius: 2px;
+      }
+
+      .avatar-glow {
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+      }
+
+      #backToTop {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 300ms, visibility 300ms, transform 300ms;
+      }
+
+      #backToTop.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      ::selection {
+        background: rgb(219 234 254);
+        color: rgb(30 64 175);
+      }
+
+      .hero-enter {
+        animation: fadeUp 760ms ease-out both;
+      }
+
+      .hero-enter-delay-1 {
+        animation-delay: 120ms;
+      }
+
+      .hero-enter-delay-2 {
+        animation-delay: 220ms;
+      }
+
+      .hero-enter-delay-3 {
+        animation-delay: 320ms;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .interactive-line {
+        position: relative;
+      }
+
+      .interactive-line::after {
+        background: currentColor;
+        bottom: -4px;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+      }
+
+      .interactive-line:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+
+      #skills span,
+      #projects span {
+        background: rgba(255, 255, 255, 0.75);
+        border-color: rgba(212, 212, 212, 0.6);
+        transition: border-color 500ms cubic-bezier(0.4, 0, 0.2, 1), color 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #projects article {
+        border-top: 1px solid rgba(59, 130, 246, 0.32);
+      }
+
+      #skills span:hover,
+      #projects span:hover {
+        background: rgb(239 246 255);
+        border-color: rgba(59, 130, 246, 0.45);
+        color: rgb(30 64 175);
+        transform: translateY(-2px);
+      }
+
+      .premium-card {
+        transition: border-color 500ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .premium-card:hover {
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+        transform: translateY(-0.5rem);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 1ms !important;
+          scroll-behavior: auto !important;
+          transition-duration: 1ms !important;
+        }
+
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* ── Dark mode overrides ── */
+      .dark body {
+        background-color: #0a0a0a;
+        color: #e5e5e5;
+      }
+
+      .dark .gradient-mesh {
+        background: linear-gradient(135deg, #0f172a 0%, #0a0a0a 50%, #0f172a 100%);
+      }
+
+      .dark .gradient-mesh::before {
+        background: radial-gradient(circle at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(30,64,175,0.08) 0%, transparent 50%);
+      }
+
+      .dark header {
+        background-color: rgba(10,10,10,0.80);
+        border-color: rgba(255,255,255,0.08);
+      }
+
+      .dark .text-neutral-950 { color: #f5f5f5; }
+      .dark .text-neutral-900 { color: #e5e5e5; }
+      .dark .text-neutral-500 { color: #a3a3a3; }
+
+      .dark .bg-neutral-50  { background-color: #111111; }
+      .dark .bg-white\/70,
+      .dark .bg-white\/80   { background-color: rgba(24,24,27,0.85); }
+
+      .dark .border-neutral-200\/60 { border-color: rgba(255,255,255,0.08); }
+
+      .dark .premium-card,
+      .dark #projects article,
+      .dark #about .premium-card {
+        background-color: rgba(24,24,27,0.85);
+        border-color: rgba(255,255,255,0.08);
+      }
+
+      .dark .premium-card:hover {
+        border-color: rgba(59,130,246,0.35);
+        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.4);
+      }
+
+      .dark #skills span,
+      .dark #projects span {
+        background: rgba(24,24,27,0.9);
+        border-color: rgba(255,255,255,0.1);
+        color: #d4d4d4;
+      }
+
+      .dark #skills span:hover,
+      .dark #projects span:hover {
+        background: rgba(30,64,175,0.2);
+        border-color: rgba(59,130,246,0.45);
+        color: #93c5fd;
+      }
+
+      .dark .rounded-2xl.border.bg-white\/80 {
+        background-color: rgba(24,24,27,0.85);
+        border-color: rgba(255,255,255,0.08);
+      }
+
+      .dark ::selection {
+        background: rgba(30,64,175,0.4);
+        color: #bfdbfe;
+      }
+    </style>
+  </head>
+  <body class="overflow-x-hidden bg-neutral-50 text-neutral-900 antialiased">
+    <button id="backToTop" class="fixed bottom-8 right-8 z-50 rounded-full bg-blue-700 p-3 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-blue-800 hover:shadow-xl" aria-label="Back to top">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+      </svg>
+    </button>
+    <header class="sticky top-0 z-50 w-full border-b border-neutral-200/60 bg-white/70 backdrop-blur-md">
+      <nav class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <a href="#" class="text-sm font-semibold tracking-tight text-neutral-950 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:text-blue-700">
+          Elmar Cayaba
+        </a>
+
+        <div class="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-neutral-500">
+          <a class="interactive-line transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:text-blue-700" href="#about">About</a>
+          <a class="interactive-line transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:text-blue-700" href="#skills">Skills</a>
+          <a class="interactive-line transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:text-blue-700" href="#projects">Projects</a>
+          <a class="interactive-line transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:text-blue-700" href="#contact">Contact</a>
+          <button id="darkToggle" aria-label="Toggle dark mode" class="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200/60 bg-white/80 text-neutral-500 transition-all duration-300 hover:border-blue-700/40 hover:text-blue-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-blue-400">
+            <!-- Sun icon (shown in dark mode) -->
+            <svg id="iconSun" class="hidden h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <!-- Moon icon (shown in light mode) -->
+            <svg id="iconMoon" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="gradient-mesh mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-32">
+        <div class="max-w-4xl">
+          <p class="hero-enter text-sm font-medium text-blue-700">PHP Web Systems &amp; Full-Stack Development</p>
+          <h1 class="hero-enter hero-enter-delay-1 mt-5 text-5xl font-bold tracking-tight text-neutral-950 sm:text-6xl lg:text-7xl">
+            Elmar Cayaba
+          </h1>
+
+          <p class="hero-enter hero-enter-delay-2 mt-6 max-w-2xl text-lg leading-8 text-neutral-500">
+            Web Developer specializing in PHP-based systems, responsive interfaces, and database-driven applications
+          </p>
+
+          <div class="hero-enter hero-enter-delay-3 mt-10 flex flex-col gap-4 sm:flex-row">
+            <a
+              href="#projects"
+              class="inline-flex items-center justify-center rounded-xl bg-blue-700 px-7 py-4 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:bg-blue-800 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.45)]"
+            >
+              View Projects
+            </a>
+            <a
+              href="#contact"
+              class="inline-flex items-center justify-center rounded-xl border border-neutral-200/60 bg-white/80 px-7 py-4 text-sm font-semibold text-neutral-950 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/40 hover:text-blue-800 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]"
+            >
+              Contact Me
+            </a>
+          </div>
+
+          <a class="interactive-line hero-enter hero-enter-delay-3 mt-6 inline-block text-sm font-medium text-neutral-500 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:text-blue-700" href="https://github.com/E1mar-cay">
+            View GitHub Profile
+          </a>
+
+          <div class="hero-enter hero-enter-delay-3 mt-16 grid max-w-3xl gap-6 border-t border-neutral-200/60 pt-8 sm:grid-cols-3">
+            <div>
+              <p class="text-2xl font-semibold tracking-tight text-blue-700">7+</p>
+              <p class="mt-2 text-sm leading-6 text-neutral-500">Featured software projects</p>
+            </div>
+            <div>
+              <p class="text-2xl font-semibold tracking-tight text-blue-700">2026</p>
+              <p class="mt-2 text-sm leading-6 text-neutral-500">BSIT expected graduation</p>
+            </div>
+            <div>
+              <p class="text-2xl font-semibold tracking-tight text-blue-700">PHP</p>
+              <p class="mt-2 text-sm leading-6 text-neutral-500">Primary web system stack</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-enter hero-enter-delay-2 hidden lg:block">
+          <div class="mb-8 flex items-center justify-center">
+            <div class="avatar-glow h-36 w-36 rounded-2xl overflow-hidden">
+              <img src="img/formal pic.jpeg" alt="Elmar Cayaba" class="h-full w-full object-cover object-top">
+            </div>
+          </div>
+          <div class="rounded-2xl border border-neutral-200/60 bg-white/70 p-8 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+            <p class="text-sm font-medium text-blue-700">Client-ready development</p>
+            <div class="mt-8 space-y-6">
+              <div class="border-b border-neutral-200/60 pb-6">
+                <p class="text-2xl font-semibold tracking-tight text-neutral-950">Database-driven platforms</p>
+                <p class="mt-2 text-sm leading-6 text-neutral-500">Structured PHP and MySQL systems for operational workflows.</p>
+              </div>
+              <div class="border-b border-neutral-200/60 pb-6">
+                <p class="text-2xl font-semibold tracking-tight text-neutral-950">Responsive interfaces</p>
+                <p class="mt-2 text-sm leading-6 text-neutral-500">Clean layouts designed for recruiters, teams, and real users.</p>
+              </div>
+              <div>
+                <p class="text-2xl font-semibold tracking-tight text-neutral-950">Project delivery</p>
+                <p class="mt-2 text-sm leading-6 text-neutral-500">University systems, thesis work, and commissioned client builds.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="reveal border-t border-neutral-200/60 bg-neutral-50 py-32">
+        <div class="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24 lg:px-8">
+          <div>
+            <p class="accent-line text-sm font-medium text-blue-700">About</p>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl">
+              Project-tested web development for real operational needs.
+            </h2>
+          </div>
+
+          <div>
+            <div class="max-w-3xl space-y-6 text-base leading-8 text-neutral-500">
+              <p>
+                I am a Bachelor of Science in Information Technology student at ISU-Ilagan
+                (2021 - 2026 Expected), with a track record of delivering high-impact university software
+                solutions and commissioned projects for independent clients.
+              </p>
+
+              <p>
+                My work focuses on building responsive, scalable web applications with practical architecture,
+                maintainable implementation patterns, and reliable database-backed workflows for real users.
+              </p>
+            </div>
+
+            <div class="mt-12 grid gap-4 sm:grid-cols-3">
+              <div class="premium-card rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md">
+                <p class="text-2xl font-semibold tracking-tight text-neutral-950">University</p>
+                <p class="mt-3 text-sm leading-6 text-neutral-500">Systems created for academic workflows and campus operations.</p>
+              </div>
+              <div class="premium-card rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md">
+                <p class="text-2xl font-semibold tracking-tight text-neutral-950">Clients</p>
+                <p class="mt-3 text-sm leading-6 text-neutral-500">Commissioned builds focused on clear requirements and usable delivery.</p>
+              </div>
+              <div class="premium-card rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md">
+                <p class="text-2xl font-semibold tracking-tight text-neutral-950">Web Systems</p>
+                <p class="mt-3 text-sm leading-6 text-neutral-500">PHP, MySQL, and responsive interfaces for dependable applications.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="reveal border-t border-neutral-200/60 py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="max-w-2xl">
+            <p class="accent-line text-sm font-medium text-blue-700">Technical Arsenal &amp; Certifications</p>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl">
+              Practical tools backed by validated credentials.
+            </h2>
+          </div>
+
+          <div class="mt-16 grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
+            <div class="grid gap-5">
+              <div class="premium-card rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md">
+                <div class="flex items-start justify-between gap-6">
+                  <div>
+                    <p class="text-sm font-medium text-blue-700">Advanced</p>
+                    <h3 class="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">Production Stack</h3>
+                  </div>
+                  <p class="text-sm text-neutral-500">Core</p>
+                </div>
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">PHP</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">MySQL</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Bootstrap</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Tailwind CSS</span>
+                </div>
+              </div>
+
+              <div class="premium-card rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md">
+                <div class="flex items-start justify-between gap-6">
+                  <div>
+                    <p class="text-sm font-medium text-blue-700">Proficient &amp; Intermediate</p>
+                    <h3 class="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">Interface &amp; Integration</h3>
+                  </div>
+                  <p class="text-sm text-neutral-500">Build</p>
+                </div>
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">JavaScript</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Responsive Design</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Database Design</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">API Integration</span>
+                </div>
+              </div>
+
+              <div class="premium-card rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md">
+                <div class="flex items-start justify-between gap-6">
+                  <div>
+                    <p class="text-sm font-medium text-blue-700">Fundamentals</p>
+                    <h3 class="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">Technical Base</h3>
+                  </div>
+                  <p class="text-sm text-neutral-500">Support</p>
+                </div>
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Java</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">GitHub</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">C++</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Python</span>
+                  <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Laravel</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="rounded-2xl border border-neutral-200/60 bg-[#0a0a0a] p-7 text-white">
+                <p class="text-sm font-medium text-blue-300">Certifications &amp; Achievements</p>
+                <h3 class="mt-3 text-3xl font-semibold tracking-tight text-white">Validated capability, not just tool familiarity.</h3>
+                <div class="mt-8 space-y-6">
+                  <div class="flex gap-4 border-l border-white/15 pl-5">
+                    <svg class="mt-1 h-5 w-5 shrink-0 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <ellipse cx="12" cy="5" rx="8" ry="3" />
+                    <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+                    <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+                  </svg>
+                  <div>
+                      <p class="font-medium text-white">Information Technology Specialist (ITS) Exam - Database &amp; HTML</p>
+                      <p class="mt-1 text-sm leading-6 text-neutral-400">Industry-aligned validation of database and HTML fundamentals.</p>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-4 border-l border-white/15 pl-5">
+                    <svg class="mt-1 h-5 w-5 shrink-0 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path d="M8 21h8" />
+                    <path d="M12 17v4" />
+                    <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
+                    <path d="M5 6H3v2a4 4 0 0 0 4 4" />
+                    <path d="M19 6h2v2a4 4 0 0 1-4 4" />
+                  </svg>
+                  <div>
+                      <p class="font-medium text-white">Certificate of Appreciation - ISU Ilagan</p>
+                      <p class="mt-1 text-sm leading-6 text-neutral-400">Recognized for developing the Newsette Website.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="reveal border-t border-neutral-200/60 bg-neutral-50 py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="max-w-2xl">
+            <p class="accent-line text-sm font-medium text-blue-700">Selected Projects</p>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl">
+              Selected systems with live, inspectable outcomes.
+            </h2>
+          </div>
+
+          <div class="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-6">
+
+            <!-- RankUp -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-3">
+              <div class="overflow-hidden" style="height:190px;">
+                <img src="SYSTEM SS/rankup.png" alt="RankUp — Faculty Document Evaluation System" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">Thesis Project</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">RankUp (Faculty Document Evaluation System)</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">My thesis project. A platform using PHP, MySQL, and the Google Drive API for storage.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">PHP</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">MySQL</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Google Drive API</span>
+                  </div>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-4">
+                  <a class="rounded-xl bg-blue-700 px-4 py-2 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:bg-blue-800" href="https://isu-rankup.com/">Live Site</a>
+                  <a class="text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay/Rankup">View Source</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ENBES -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-3">
+              <div class="overflow-hidden" style="height:190px;">
+                <img src="SYSTEM SS/enbes.png" alt="ISU-Ilagan CMS (ENBES)" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">University CMS</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">ISU-Ilagan CMS (ENBES)</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">A Content Management System built for the university.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">CMS</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">University System</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Content Management</span>
+                  </div>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-4">
+                  <a class="rounded-xl bg-blue-700 px-4 py-2 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:bg-blue-800" href="https://isutestlab.site/enbes/">Live Site</a>
+                  <a class="text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay/ENBES">View Source</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- BuildBuy -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-2">
+              <div class="overflow-hidden" style="height:160px;">
+                <img src="SYSTEM SS/buildbuy.png" alt="BuildBuy E-commerce" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">Commerce</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">BuildBuy E-commerce</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">A construction materials procurement system.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">E-commerce</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Procurement</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Construction</span>
+                  </div>
+                </div>
+                <a class="mt-8 text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay/E-commerce-Construction-Materials-System-BuildBuy">View Source</a>
+              </div>
+            </article>
+
+            <!-- HealthLogs -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-2">
+              <div class="overflow-hidden" style="height:160px;">
+                <img src="SYSTEM SS/healthlogs.png" alt="HealthLogs — Barangay Health Management System" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">Health Management</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">HealthLogs</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">Barangay Health Management System for patient intake, immunization, and medicine inventory.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">PHP</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">MySQL</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Health System</span>
+                  </div>
+                </div>
+                <a class="mt-8 text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay/Healthlogs">View Source</a>
+              </div>
+            </article>
+
+            <!-- FNS Pharmacy POS -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-2">
+              <div class="overflow-hidden" style="height:160px;">
+                <img src="SYSTEM SS/pos.png" alt="FNS Pharmacy Point of Sale" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">Point of Sale</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">FNS Pharmacy POS</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">Cashier terminal and point of sale system with barcode scanning and checkout workflows.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">POS</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">PHP</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Operations</span>
+                  </div>
+                </div>
+                <a class="mt-8 text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay/Point-of-Sale-System">View Source</a>
+              </div>
+            </article>
+
+            <!-- DineNow -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-3">
+              <div class="overflow-hidden" style="height:190px;">
+                <img src="SYSTEM SS/dinenow.png" alt="DineNow — Smart Reservation & Meal Pre-order System" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">Food Court System</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">DineNow</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">Smart reservation and meal pre-order system for ISU Cauayan Campus Food Court.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Reservation</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Pre-order</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">PHP</span>
+                  </div>
+                </div>
+                <a class="mt-8 text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay">View Source</a>
+              </div>
+            </article>
+
+            <!-- The Newsette -->
+            <article class="reveal flex flex-col rounded-2xl border border-neutral-200/60 bg-white/80 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:border-blue-700/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] lg:col-span-3">
+              <div class="overflow-hidden" style="height:190px;">
+                <img src="SYSTEM SS/newsette.png" alt="The Newsette — Official Publication of ISU-Ilagan" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              </div>
+              <div class="flex flex-1 flex-col p-7">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-blue-700">Publication Website</p>
+                  <h3 class="mt-1 text-xl font-semibold tracking-tight text-neutral-900">The Newsette</h3>
+                  <p class="mt-4 text-base leading-7 text-neutral-500">Official publication website for ISU-Ilagan. Recognized with a Certificate of Appreciation.</p>
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">CMS</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">Publication</span>
+                    <span class="rounded-xl border border-neutral-200 px-3 py-1 text-sm text-neutral-600">PHP</span>
+                  </div>
+                </div>
+                <a class="mt-8 text-sm font-medium text-neutral-900 underline-offset-4 hover:underline" href="https://github.com/E1mar-cay">View Source</a>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="reveal border-t border-neutral-200/60 py-32">
+        <div class="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24 lg:px-8">
+          <div>
+            <p class="accent-line text-sm font-medium text-blue-700">Contact</p>
+            <h2 class="mt-6 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+              Let's build something reliable.
+            </h2>
+            <p class="mt-6 max-w-xl text-base leading-8 text-neutral-500">
+              Based in Alinguigan 2nd, Ilagan City, 3300, Philippines, I am open to conversations about web
+              systems, technical collaboration, and practical software solutions.
+            </p>
+            <p class="mt-4 text-base leading-8 text-neutral-500">
+              <a class="interactive-line text-neutral-900" href="mailto:elmarcayaba39@gmail.com">elmarcayaba39@gmail.com</a>
+              <span class="text-neutral-300">|</span>
+              <a class="interactive-line text-neutral-900" href="tel:+639655544093">09655544093</a>
+            </p>
+          </div>
+
+          <div>
+            <!--
+              PHP placeholder for handling the POST request:
+
+              <?php
+              if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                  $name = trim($_POST["name"] ?? "");
+                  $email = trim($_POST["email"] ?? "");
+                  $message = trim($_POST["message"] ?? "");
+
+                  // Validate input, send email or save to database, then return a response.
+              }
+              ?>
+            -->
+            <form action="#" method="post" class="space-y-8 rounded-2xl border border-neutral-200/60 bg-white/70 p-8 backdrop-blur-md shadow-sm">
+              <div class="grid gap-8 sm:grid-cols-2">
+                <div>
+                  <label for="name" class="block text-sm font-semibold text-neutral-900">Name <span class="text-blue-600">*</span></label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    placeholder="John Doe"
+                    class="mt-3 w-full rounded-lg border border-neutral-200 bg-white px-4 py-3 text-neutral-900 transition-all duration-300 placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label for="email" class="block text-sm font-semibold text-neutral-900">Email <span class="text-blue-600">*</span></label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="john@example.com"
+                    class="mt-3 w-full rounded-lg border border-neutral-200 bg-white px-4 py-3 text-neutral-900 transition-all duration-300 placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="subject" class="block text-sm font-semibold text-neutral-900">Subject</label>
+                <input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  placeholder="Project inquiry"
+                  class="mt-3 w-full rounded-lg border border-neutral-200 bg-white px-4 py-3 text-neutral-900 transition-all duration-300 placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                />
+              </div>
+
+              <div>
+                <label for="message" class="block text-sm font-semibold text-neutral-900">Message <span class="text-blue-600">*</span></label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="6"
+                  placeholder="Tell me about your project..."
+                  class="mt-3 w-full resize-none rounded-lg border border-neutral-200 bg-white px-4 py-3 text-neutral-900 transition-all duration-300 placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="flex items-center justify-between gap-4">
+                <p class="text-sm text-neutral-500"><span class="text-blue-600">*</span> Required fields</p>
+                <button
+                  type="submit"
+                  class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-8 py-4 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 hover:bg-blue-800 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.45)]"
+                >
+                  <span>Send Message</span>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative border-t border-neutral-200/60 bg-neutral-50 py-8">
+      <div class="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+      <div class="mx-auto flex max-w-7xl flex-col gap-6 px-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <p class="text-sm text-neutral-500">&copy; 2026 Elmar Cayaba. All rights reserved.</p>
+
+        <div class="flex items-center gap-5">
+          <a class="text-blue-700 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-[2px] hover:text-blue-900" href="https://github.com/E1mar-cay" aria-label="GitHub">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.52 2.87 8.36 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.38-3.37-1.38-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.98c.85 0 1.7.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.92-2.34 4.78-4.57 5.04.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.59.69.49A10.21 10.21 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ── Dark mode toggle ──
+      const html    = document.documentElement;
+      const toggle  = document.getElementById('darkToggle');
+      const iconSun  = document.getElementById('iconSun');
+      const iconMoon = document.getElementById('iconMoon');
+
+      function applyTheme(dark) {
+        html.classList.toggle('dark', dark);
+        iconSun.classList.toggle('hidden', !dark);
+        iconMoon.classList.toggle('hidden', dark);
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      }
+
+      // Restore saved preference, fallback to system preference
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(saved ? saved === 'dark' : prefersDark);
+
+      toggle.addEventListener('click', () => applyTheme(!html.classList.contains('dark')));
+
+      // ── Scroll reveal ──
+      const revealElements = document.querySelectorAll(".reveal");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.14 }
+      );
+
+      revealElements.forEach((element, index) => {
+        element.style.transitionDelay = `${Math.min(index * 55, 220)}ms`;
+        observer.observe(element);
+      });
+
+      const backToTop = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
+  </body>
+</html>

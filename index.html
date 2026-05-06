@@ -733,7 +733,7 @@
             -->
             <form id="contactForm" class="space-y-6 rounded-2xl border border-neutral-200/60 bg-white/70 p-6 backdrop-blur-md shadow-sm sm:p-8">
               <!-- Honeypot field (hidden from humans, visible to bots) -->
-              <input type="text" id="_hp_website" name="_hp_website" style="position:absolute;left:-9999px;width:1px;height:1px;" tabindex="-1" autocomplete="off" aria-hidden="true">
+              
               <div class="grid gap-6 sm:grid-cols-2">
                 <div>
                   <label for="name" class="block text-sm font-semibold text-neutral-900">Name <span class="text-blue-600">*</span></label>
@@ -946,12 +946,6 @@
         e.preventDefault();
         console.log('Form submitted');
 
-        // Honeypot check
-        const honeypot = document.getElementById('_hp_website');
-        if (honeypot && honeypot.value !== '') {
-          console.log('Honeypot triggered');
-          return;
-        }
 
         // Rate limit check
         if (!checkRateLimit()) {
